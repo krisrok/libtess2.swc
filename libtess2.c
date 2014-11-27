@@ -18,9 +18,11 @@ void* poolAlloc(void* userData, unsigned int size) {
 void poolFree(void* userData, void* ptr) {
 }
 
+TESStess* t;
 
-TESStess* newTess(int size) {
-	TESStess* t = (TESStess *)malloc(sizeof(TESStess));
+void initBuffer(int size)
+{
+	t = (TESStess *)malloc(sizeof(TESStess));
 	t->pool = (MemPool *)malloc(sizeof(MemPool));
 	t->pool->buf = (unsigned char *)malloc(size);
 	t->pool->cap = size;
@@ -31,15 +33,9 @@ TESStess* newTess(int size) {
 	t->ma->memfree = poolFree;
 	t->ma->userData = (void*)t->pool;
 	t->ma->extraVertices = 256; // realloc not provided, allow 256 extra vertices.
-	t->tess = tessNewTess(t->ma);
-	if (t->tess == 0) {
-		deleteTess(t);
-		return NULL;
-	}
-	return t;
 }
 
-void deleteTess(TESStess* t) {
+void destroyBuffer() {
 	tessDeleteTess(t->tess);
 	free(t->ma);
 	free(t->pool->buf);
@@ -47,30 +43,35 @@ void deleteTess(TESStess* t) {
 	free(t);
 }
 
-void addContour(TESStess* t, int size, const void* pointer, int stride, int count) {
+void newTess() {
+	t->pool->size = 0;
+	t->tess = tessNewTess(t->ma);
+}
+
+void addContour(int size, const void* pointer, int stride, int count) {
 	tessAddContour(t->tess, size, pointer, stride, count);
 }
 
-int tesselate(TESStess* t, int windingRule, int elementType, int polySize, int vertexSize) {
+int tesselate(int windingRule, int elementType, int polySize, int vertexSize) {
 	return tessTesselate(t->tess, windingRule, elementType, polySize, vertexSize, NULL);
 }
 
-int getVertexCount(TESStess *t) {
+int getVertexCount() {
 	return tessGetVertexCount(t->tess);
 }
 
-const TESSreal* getVertices(TESStess *t) {
+const TESSreal* getVertices() {
 	return tessGetVertices(t->tess);
 }
 
-const TESSindex* getVertexIndices(TESStess *t) {
+const TESSindex* getVertexIndices() {
 	return tessGetVertexIndices(t->tess);
 }
 
-int getElementCount(TESStess *t) {
+int getElementCount() {
 	return tessGetElementCount(t->tess);
 }
 
-const TESSindex* getElements(TESStess *t) {
+const TESSindex* getElements() {
 	return tessGetElements(t->tess);
 }

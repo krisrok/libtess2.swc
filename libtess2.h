@@ -14,23 +14,24 @@ typedef struct sTESStess {
   MemPool* pool;
 } TESStess;
 
-TESStess* newTess(int size);
+void initBuffer(int size);
+void destroyBuffer();
 
-void deleteTess(TESStess* t);
+void newTess();
 
-void addContour(TESStess* t, int size, const void* pointer, int stride, int count);
+void addContour(int size, const void* pointer, int stride, int count);
 
-int tesselate(TESStess* t, int windingRule, int elementType, int polySize, int vertexSize);
+int tesselate(int windingRule, int elementType, int polySize, int vertexSize);
 
-int getVertexCount(TESStess *t);
+int getVertexCount();
 
-const TESSreal* getVertices(TESStess *t);
+const TESSreal* getVertices();
 
-const TESSindex* getVertexIndices(TESStess *t);
+const TESSindex* getVertexIndices();
 
-int getElementCount(TESStess *t);
+int getElementCount();
 
-const TESSindex* getElements(TESStess *t);
+const TESSindex* getElements();
 
 #ifdef __cplusplus
 };

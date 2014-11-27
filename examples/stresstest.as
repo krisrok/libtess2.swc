@@ -21,6 +21,7 @@ var mc:Sprite = new Sprite();
 addChild(mc);
 
 var t:Tesselator = new Tesselator();
+t.initBuffer(1024 * 1024);
 
 addEventListener(Event.ENTER_FRAME, function(e:Event):void {
   var path1:Vector.<Number> = createCircle(new Point(300, 300), 250, 50, 300);
@@ -28,7 +29,7 @@ addEventListener(Event.ENTER_FRAME, function(e:Event):void {
   var path3:Vector.<Number> = createCircle(new Point(300, 300), 130, 50, 100);
   var path4:Vector.<Number> = createCircle(new Point(300, 300), 50, 50, 50);
 
-  t.newTess(1024 * 1024);
+  t.newTess();
   t.addContour(path1, path1.length / 2, 2);
   t.addContour(path2, path2.length / 2, 2);
   t.addContour(path3, path3.length / 2, 2);
@@ -38,7 +39,6 @@ addEventListener(Event.ENTER_FRAME, function(e:Event):void {
   var vertexCount:int = t.getVertexCount();
   var elements:Vector.<int> = t.getElements();
   var elementCount:int = t.getElementCount();
-  t.deleteTess();
 
   mc.graphics.clear();
   mc.graphics.lineStyle(1, 0x008800);

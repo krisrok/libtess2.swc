@@ -5,7 +5,8 @@ var path1:Vector.<Number> = Vector.<Number>([0,0, 200,0, 200,200, 0,200]);
 var path2:Vector.<Number> = Vector.<Number>([50,50, 150,50, 150,150, 50,150]);
 
 var t:Tesselator = new Tesselator();
-t.newTess(1024 * 1024);
+t.initBuffer(1024 * 1024);
+t.newTess();
 t.addContour(path1, path1.length / 2, 2);
 t.addContour(path2, path2.length / 2, 2);
 t.tesselate(Tesselator.WINDING_ODD, Tesselator.ELEMENT_TYPE_POLYGONS, 3, 2);
@@ -13,7 +14,7 @@ var vertices:Vector.<Number> = t.getVertices();
 var vertexCount:int = t.getVertexCount();
 var elements:Vector.<int> = t.getElements();
 var elementCount:int = t.getElementCount();
-t.deleteTess();
+t.destroyBuffer();
 
 var mc:Sprite = new Sprite();
 mc.x = 20;
