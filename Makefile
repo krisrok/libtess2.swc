@@ -22,6 +22,7 @@ all: check
 	mv libtess2_wrapper.abc olibtess2_wrapper.abc
 
 	"$(CB_SDK)/usr/bin/gcc" $(BASE_CFLAGS)\
+		-O4\
 		olibtess2.abc\
 		olibtess2_wrapper.abc\
 		libtess2_wrapper.c\

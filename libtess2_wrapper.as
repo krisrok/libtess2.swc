@@ -34,15 +34,16 @@ package com.codeazur.libtess2
 			libtess2.newTess();
     }
     
-    public function addContour(vertices:Vector.<Number>, vertexCount:int = -1, vertexSize:int = 2):void {
+    public function addContour(vertices:Vector.<int>, vertexCount:int = -1, vertexSize:int = 2):void {
       vertexSize = Math.min(Math.max(vertexSize, 3), 2);
       vertexCount = (vertexCount < 0) ? vertices.length / vertexSize : Math.min(vertexCount, vertices.length / vertexSize);
       var len:int = vertexCount * vertexSize;
       var ptr:int = CModule.malloc(4 * len);
-      for (var i:int = 0, p:int = ptr; i < len; i++) {
-        CModule.writeFloat(p, vertices[i]);
-        p += 4;
-      }
+			CModule.writeIntVector(ptr, vertices);
+      //for (var i:int = 0, p:int = ptr; i < len; i++) {
+        //CModule.writeFloat(p, vertices[i]);
+        //p += 4;
+      //}
       libtess2.addContour(vertexSize, ptr, 4 * vertexSize, vertexCount);
       CModule.free(ptr);
     }
@@ -58,15 +59,16 @@ package com.codeazur.libtess2
       return libtess2.getVertexCount();
     }
 
-    public function getVertices():Vector.<Number> {
+    public function getVertices():Vector.<int> {
       var len:int = getVertexCount() * _vertexSize;
       var ptr:int = libtess2.getVertices();
-      var vertices:Vector.<Number> = new Vector.<Number>(len);
-      for (var i:int = 0; i < len; i++) {
-        vertices[i] = CModule.readFloat(ptr);
-        ptr += 4;
-      }
-      return vertices;
+			return CModule.readIntVector(ptr, len);
+      //var vertices:Vector.<Number> = new Vector.<Number>(len);
+      //for (var i:int = 0; i < len; i++) {
+        //vertices[i] = CModule.readFloat(ptr);
+        //ptr += 4;
+      //}
+      //return vertices;
     }
 
     public function getVertexIndices():Vector.<int> {
